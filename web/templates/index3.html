@@ -25,7 +25,7 @@
             display: flex;
             flex-direction: column;
         }
-        input, select, button {
+        input, button {
             margin: 10px 0;
             padding: 10px;
             border-radius: 5px;
@@ -64,32 +64,30 @@
         }
     </style>
     <script>
-        // Your existing JavaScript for validation
-        
-        // JavaScript for dynamic district updates
-        document.addEventListener('DOMContentLoaded', function() {
-            var citySelect = document.getElementById('city');
-            var districtSelect = document.getElementById('district');
+        function validateForm() {
+            var distance = document.forms["myForm"]["distance"].value;
+            var area = document.forms["myForm"]["area"].value;
+            var structure = document.forms["myForm"]["structure"].value;
+            var coverage = document.forms["myForm"]["coverage"].value;
+            var volume_rate = document.forms["myForm"]["volume_rate"].value;
+            var age = document.forms["myForm"]["age"].value;
+            var district = document.forms["myForm"]["district"].value;
 
-            // Update districts based on selected city
-            citySelect.addEventListener('change', function() {
-                var selectedCity = this.value;
-                districtSelect.innerHTML = '<option value="">请选择地区名</option>'; // Reset district select
-                if (selectedCity && cityToDistricts[selectedCity]) {
-                    cityToDistricts[selectedCity].forEach(function(district) {
-                        var option = new Option(district, district);
-                        districtSelect.add(option);
-                    });
-                }
-            });
-        });
-
-        var cityToDistricts = {{ city_to_districts | tojson }};
+            if (distance === "" || area === "" || structure === "" || coverage === "" || volume_rate === "" || age === "" || district === "") {
+                alert("所有字段必须填写");
+                return false;
+            }
+            if (isNaN(area) || isNaN(distance) || isNaN(coverage) || isNaN(volume_rate) || isNaN(age)) {
+                alert("面積（㎡）、最寄駅：距離、建ぺい率（％）、容積率（％）、建築年数 必须是数字");
+                return false;
+            }
+            return true;
+        }
     </script>
 </head>
 <body>
     <div class="container">
-        <h2>东京房价预测-ver1.1</h2>
+        <h2>东京房价预测-ver1.0</h2>
         <form name="myForm" method="post" onsubmit="return validateForm()">
             最寄駅：距離: <input type="text" name="distance" value="{{ request.form['distance'] if 'distance' in request.form else '' }}" required><br>
             面積（㎡）: <input type="text" name="area" value="{{ request.form['area'] if 'area' in request.form else '' }}" required><br>
@@ -97,23 +95,8 @@
             建ぺい率（％）: <input type="text" name="coverage" value="{{ request.form['coverage'] if 'coverage' in request.form else '' }}" required><br>
             容積率（％）: <input type="text" name="volume_rate" value="{{ request.form['volume_rate'] if 'volume_rate' in request.form else '' }}" required><br>
             建築年数: <input type="text" name="age" value="{{ request.form['age'] if 'age' in request.form else '' }}" required><br>
-            <select id="city" name="city" required>
-                <option value="">请选择市区町村名</option>
-                {% for city in cities %}
-                <option value="{{ city }}" {% if city == selected_city %}selected{% endif %}>{{ city }}</option>
-                {% endfor %}
-            </select><br>
-            
-            地区名:
-            <select id="district" name="district" required>
-                <option value="">请选择地区名</option>
-                {% if selected_city %}
-                    {% for district in city_to_districts[selected_city] %}
-                    <option value="{{ district }}" {% if district == selected_district %}selected{% endif %}>{{ district }}</option>
-                    {% endfor %}
-                {% endif %}
-            </select><br>
-            <button type="submit">PREDICT</button>
+            地区名: <input type="text" name="district" value="{{ request.form['district'] if 'district' in request.form else '' }}" required><br>
+            <button type="submit">搜索与预测</button>
         </form>
         {% if prediction_text %}
             <div class="result">
