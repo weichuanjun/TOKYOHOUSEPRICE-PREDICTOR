@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>房价预测</title>
+    <title>东京房价预测-ver1.0</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -58,19 +58,44 @@
         th {
             background-color: #f4f4f9;
         }
+        .footer-text {
+            text-align: center;
+            font-size: 14px;
+        }
     </style>
+    <script>
+        function validateForm() {
+            var distance = document.forms["myForm"]["distance"].value;
+            var area = document.forms["myForm"]["area"].value;
+            var structure = document.forms["myForm"]["structure"].value;
+            var coverage = document.forms["myForm"]["coverage"].value;
+            var volume_rate = document.forms["myForm"]["volume_rate"].value;
+            var age = document.forms["myForm"]["age"].value;
+            var district = document.forms["myForm"]["district"].value;
+
+            if (distance === "" || area === "" || structure === "" || coverage === "" || volume_rate === "" || age === "" || district === "") {
+                alert("所有字段必须填写");
+                return false;
+            }
+            if (isNaN(area) || isNaN(distance) || isNaN(coverage) || isNaN(volume_rate) || isNaN(age)) {
+                alert("面積（㎡）、最寄駅：距離、建ぺい率（％）、容積率（％）、建築年数 必须是数字");
+                return false;
+            }
+            return true;
+        }
+    </script>
 </head>
 <body>
     <div class="container">
-        <h2>房价预测系统</h2>
-        <form method="post">
-            最近车站距离（分）: <input type="text" name="distance" value="{{ request.form['distance'] if 'distance' in request.form else '' }}" required><br>
-            建筑面积（㎡）: <input type="text" name="area" value="{{ request.form['area'] if 'area' in request.form else '' }}" required><br>
-            建筑结构: <input type="text" name="structure" value="{{ request.form['structure'] if 'structure' in request.form else '' }}" required><br>
-            建筑占地率（％）: <input type="text" name="coverage" value="{{ request.form['coverage'] if 'coverage' in request.form else '' }}" required><br>
-            容积率（％）: <input type="text" name="volume_rate" value="{{ request.form['volume_rate'] if 'volume_rate' in request.form else '' }}" required><br>
-            建筑年数: <input type="text" name="age" value="{{ request.form['age'] if 'age' in request.form else '' }}" required><br>
-            地区名称: <input type="text" name="district" value="{{ request.form['district'] if 'district' in request.form else '' }}" required><br>
+        <h2>东京房价预测-ver1.0</h2>
+        <form name="myForm" method="post" onsubmit="return validateForm()">
+            最寄駅：距離: <input type="text" name="distance" value="{{ request.form['distance'] if 'distance' in request.form else '' }}" required><br>
+            面積（㎡）: <input type="text" name="area" value="{{ request.form['area'] if 'area' in request.form else '' }}" required><br>
+            建物の構造: <input type="text" name="structure" value="{{ request.form['structure'] if 'structure' in request.form else '' }}" required><br>
+            建ぺい率（％）: <input type="text" name="coverage" value="{{ request.form['coverage'] if 'coverage' in request.form else '' }}" required><br>
+            容積率（％）: <input type="text" name="volume_rate" value="{{ request.form['volume_rate'] if 'volume_rate' in request.form else '' }}" required><br>
+            建築年数: <input type="text" name="age" value="{{ request.form['age'] if 'age' in request.form else '' }}" required><br>
+            地区名: <input type="text" name="district" value="{{ request.form['district'] if 'district' in request.form else '' }}" required><br>
             <button type="submit">搜索与预测</button>
         </form>
         {% if prediction_text %}
@@ -85,5 +110,6 @@
             </div>
         {% endif %}
     </div>
+    <h3 class="footer-text">Created by WEI CHUANJUN</h3>
 </body>
 </html>

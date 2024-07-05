@@ -9,7 +9,15 @@ loaded_preprocessor = joblib.load('xgboost_preprocessor.pkl')
 loaded_model = joblib.load('xgboost_model.pkl')
 
 # 加载数据集
-data = pd.read_csv('./exported_data11.csv')  # 确保路径正确
+data = pd.read_csv('./exported_data11.csv', dtype={
+    '最寄駅：距離（分）': int,
+    '面積（㎡）': float,
+    '建物の構造': str,
+    '建ぺい率（％）': float,
+    '容積率（％）': float,
+    '建築年数': int,
+    '地区名': str
+})
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
@@ -24,9 +32,9 @@ def home():
             '建築年数': int(request.form['age']),
             '地区名': request.form['district']
         }
-        new_data = pd.DataFrame([query])
 
         # 预处理和预测
+        new_data = pd.DataFrame([query])
         X_test_transformed = loaded_preprocessor.transform(new_data)
         predicted_price = loaded_model.predict(X_test_transformed)
         predicted_price_in_ten_thousands = round(predicted_price[0]*1.02 / 10000)
@@ -34,19 +42,13 @@ def home():
 
         # 根据表单数据筛选匹配的历史记录
         conditions = (
-            # (data['最寄駅：距離（分）'] == query['最寄駅：距離（分）']) &
-            (data['面積（㎡）'].between(query['面積（㎡）'] * 0.90, query['面積（㎡）'] * 1.1)) &
-            (data['建物の構造'] == query['建物の構造']) &
-            # (data['建ぺい率（％）'].between(query['建ぺい率（％）'] * 0.95, query['建ぺい率（％）'] * 1.05)) &
-            # (data['容積率（％）'].between(query['容積率（％）'] * 0.95, query['容積率（％）'] * 1.05)) &
-            (data['建築年数'] == query['建築年数']) &
+            (data['面積（㎡）'].between(query['面積（㎡）'] * 0.5, query['面積（㎡）'] * 1.5)) &
+            # (data['建物の構造'] == query['建物の構造']) &
+            (data['建築年数'].between(query['建築年数'] - 5, query['建築年数'] + 5)) &
             (data['地区名'] == query['地区名'])
         )
         filtered_data = data[conditions]
-        if not filtered_data.empty:
-            result = filtered_data.to_html(classes='data', index=False, border=0)
-        else:
-            result = "没有找到匹配的数据。"
+        result = "没有找到匹配的数据。" if filtered_data.empty else filtered_data.to_html(classes='data', index=False, border=0)
 
         return render_template('index.html', prediction_text=prediction_text, result=result)
 
