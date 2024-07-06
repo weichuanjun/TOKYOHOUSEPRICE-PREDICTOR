@@ -12,16 +12,23 @@
 
 ## 安装
 
-1. 克隆此仓库到本地：
+- 1. 克隆此仓库到本地：
    ```bash
    git clone <仓库URL>
-2.进入项目目录：
+- 2.进入项目目录：
    ```bash
    cd <项目目录>
-3.创建虚拟环境并激活：
+- 3.创建虚拟环境并激活：
+     ```bash
+   python -m venv venv
+   source venv/bin/activate  # 对于 Windows 系统：venv\Scripts\activate
+- 4.安装依赖项：
+  ```bash
+  pip install -r requirements.txt
 
-RELEASE NOTE
-- ver 2.0 : add some new feature
-  - add some charts
-- ver 1.1 :add pull down for district information
-  
+## 使用
+- 1.	启动 Flask 应用：
+     ```bash
+     python app.py
+- 2.	打开浏览器，访问 http://127.0.0.1:8070。
+- 3.	在主页上输入房产的特征信息并点击“PREDICT”按钮以获取预测价格和相关的历史交易数据。
