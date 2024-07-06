@@ -15,11 +15,11 @@ if not os.path.exists('static'):
     os.makedirs('static')
 
 # 加载模型和预处理器
-loaded_preprocessor = joblib.load('xgboost_preprocessor.pkl')
-loaded_model = joblib.load('xgboost_model.pkl')
+loaded_preprocessor = joblib.load('../models/xgboost_preprocessor.pkl')
+loaded_model = joblib.load('../models/xgboost_model.pkl')
 
 # 加载数据集
-data = pd.read_csv('./exported_data11.csv', dtype={
+data = pd.read_csv('../DataSet/exported_data11.csv', dtype={
     '最寄駅：距離（分）': int,
     '面積（㎡）': float,
     '建物の構造': str,
@@ -31,7 +31,7 @@ data = pd.read_csv('./exported_data11.csv', dtype={
 })
 
 # 加载地区数据并创建市区町村名到地区名的映射
-districts_data = pd.read_csv('./city_district_mapping.csv')
+districts_data = pd.read_csv('../DataSet/city_district_mapping.csv')
 city_to_districts = districts_data.groupby('市区町村名')['地区名'].apply(list).to_dict()
 
 def calculate_and_plot_stats(df, district_name):
