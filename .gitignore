@@ -1,2 +1,5 @@
 DATA/*
 mlruns
+web/__pycache__
+test/*
+MLFLOW
