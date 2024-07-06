@@ -12,35 +12,39 @@
 
 ## 安装
 
-- 1. 克隆此仓库到本地：
+- 克隆此仓库到本地：
    ```bash
    git clone https://github.com/weichuanjun/TOKYOHOUSEPRICE-PREDICTOR.git
-- 2.进入项目目录：
+- 进入项目目录：
    ```bash
    cd web
-- 3.创建虚拟环境并激活：
+- 创建虚拟环境并激活：
      ```bash
    python -m venv venv
    source venv/bin/activate  # 对于 Windows 系统：venv\Scripts\activate
-- 4.安装依赖项：
+- 安装依赖项：
   ```bash
   pip install -r requirements.txt
 
 ## 使用
-- 1.	启动 Flask 应用：
+- 启动 Flask 应用：
      ```bash
      python app.py
-- 2.	打开浏览器，访问 http://127.0.0.1:8070。
-- 3.	在主页上输入房产的特征信息并点击“PREDICT”按钮以获取预测价格和相关的历史交易数据。
+- 打开浏览器，访问 http://127.0.0.1:8070。
+- 在主页上输入房产的特征信息并点击“PREDICT”按钮以获取预测价格和相关的历史交易数据。
 
 ## 文件结构
-	•	app.py: Flask 应用的主文件，处理路由和主要逻辑。
-	•	templates/index.html: 网页的 HTML 模板。
-	•	static/price_stats.png: 生成的价格趋势图表。
+- app.py: Flask 应用的主文件，处理路由和主要逻辑。
+- templates/index.html: 网页的 HTML 模板。
+- static/price_stats.png: 生成的价格趋势图表。
+- Train_Project/:里面有模型的训练方法
+- models/：里面存储着训练好的模型
+- DataSet/：里面存储着需要用到的数据
+- 
 ## 功能
-	•	预测房价: 用户输入房产特征，应用使用预训练的 XGBoost 模型进行预测。
-	•	显示历史数据: 根据用户输入的特征，筛选并显示匹配的历史交易记录。
-	•	生成统计图表: 生成并显示选定地区的房价趋势和交易量图表。
+- 预测房价: 用户输入房产特征，应用使用预训练的 XGBoost 模型进行预测。
+- 显示历史数据: 根据用户输入的特征，筛选并显示匹配的历史交易记录。
+- 生成统计图表: 生成并显示选定地区的房价趋势和交易量图表。
 
 ## RELEASE
 - V2.1：加上了价格平均数和中位数走势图，加上了成交量走势图
