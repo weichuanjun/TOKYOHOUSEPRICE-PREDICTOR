@@ -8,18 +8,62 @@
             font-family: Arial, sans-serif;
             background-color: #f4f4f9;
             margin: 0;
-            padding: 20px;
+            padding: 0 20px;
         }
         .container {
-            max-width: 500px;
-            margin: 50px auto;
+            max-width: 1200px;
+            margin: 20px auto;
             padding: 20px;
             background-color: #fff;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
         h2 {
+            margin-bottom: 10px;
             text-align: center;
+            width: 100%;
+        }
+        .chart h2 {
+            margin-bottom: 5px; /* 确保标题与图表内容之间有间距 */
+        }
+        .form-result-container {
+            margin-top: 20px;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            align-items: stretch; /* 使子元素高度一致 */
+        }
+        .form-container {
+            width: 48%;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            flex: 1; 
+        }
+        .result-container {
+            width: 48%;
+            max-height: 600px;
+            overflow-y: auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            height: auto; /* 确保容器高度自适应内容 */
+            flex: 1; /* 使容器在flex布局中占据相同的高度 */
+            max-height:900px
         }
         form {
             display: flex;
@@ -41,9 +85,37 @@
         button:hover {
             background-color: #0056b3;
         }
+        .prediction {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #d9534f; /* Highlight color */
+            text-align: center;
+        }
         .result {
             text-align: center;
-            margin-top: 20px;
+            margin-top: 1px;
+        }
+        .charts-container {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-left: 20px; /* 设置图表的左外边距 */
+            margin-right: 20px; /* 设置图表的右外边距 */
+        }
+        .chart {
+            margin-bottom: 5px;
+            width: 97%;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+        }
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
         }
         table {
             width: 100%;
@@ -61,20 +133,17 @@
         .footer-text {
             text-align: center;
             font-size: 14px;
+            width: 100%;
         }
     </style>
     <script>
-        // Your existing JavaScript for validation
-        
-        // JavaScript for dynamic district updates
         document.addEventListener('DOMContentLoaded', function() {
             var citySelect = document.getElementById('city');
             var districtSelect = document.getElementById('district');
 
-            // Update districts based on selected city
             citySelect.addEventListener('change', function() {
                 var selectedCity = this.value;
-                districtSelect.innerHTML = '<option value="">请选择地区名</option>'; // Reset district select
+                districtSelect.innerHTML = '<option value="">请选择地区名</option>';
                 if (selectedCity && cityToDistricts[selectedCity]) {
                     cityToDistricts[selectedCity].forEach(function(district) {
                         var option = new Option(district, district);
@@ -89,44 +158,70 @@
 </head>
 <body>
     <div class="container">
-        <h2>东京房价预测-ver1.1</h2>
-        <form name="myForm" method="post" onsubmit="return validateForm()">
-            最寄駅：距離: <input type="text" name="distance" value="{{ request.form['distance'] if 'distance' in request.form else '' }}" required><br>
-            面積（㎡）: <input type="text" name="area" value="{{ request.form['area'] if 'area' in request.form else '' }}" required><br>
-            建物の構造: <input type="text" name="structure" value="{{ request.form['structure'] if 'structure' in request.form else '' }}" required><br>
-            建ぺい率（％）: <input type="text" name="coverage" value="{{ request.form['coverage'] if 'coverage' in request.form else '' }}" required><br>
-            容積率（％）: <input type="text" name="volume_rate" value="{{ request.form['volume_rate'] if 'volume_rate' in request.form else '' }}" required><br>
-            建築年数: <input type="text" name="age" value="{{ request.form['age'] if 'age' in request.form else '' }}" required><br>
-            <select id="city" name="city" required>
-                <option value="">请选择市区町村名</option>
-                {% for city in cities %}
-                <option value="{{ city }}" {% if city == selected_city %}selected{% endif %}>{{ city }}</option>
-                {% endfor %}
-            </select><br>
-            
-            地区名:
-            <select id="district" name="district" required>
-                <option value="">请选择地区名</option>
-                {% if selected_city %}
-                    {% for district in city_to_districts[selected_city] %}
-                    <option value="{{ district }}" {% if district == selected_district %}selected{% endif %}>{{ district }}</option>
-                    {% endfor %}
+        <h2>Tokyo HousePrice Predictor - Ver2.1</h2>
+        <div class="form-result-container">
+            <div class="form-container">
+                <form name="myForm" method="post" onsubmit="return validateForm()">
+                    最寄駅：距離: <input type="text" name="distance" value="{{ request.form['distance'] if 'distance' in request.form else '' }}" required><br>
+                    面積（㎡）: <input type="text" name="area" value="{{ request.form['area'] if 'area' in request.form else '' }}" required><br>
+                    建物の構造: <input type="text" name="structure" value="{{ request.form['structure'] if 'structure' in request.form else '' }}" required><br>
+                    建ぺい率（％）: <input type="text" name="coverage" value="{{ request.form['coverage'] if 'coverage' in request.form else '' }}" required><br>
+                    容積率（％）: <input type="text" name="volume_rate" value="{{ request.form['volume_rate'] if 'volume_rate' in request.form else '' }}" required><br>
+                    建築年数: <input type="text" name="age" value="{{ request.form['age'] if 'age' in request.form else '' }}" required><br>
+                    地区名:
+                    <select id="city" name="city" required>
+                        <option value="">请选择市区町村名</option>
+                        {% for city in cities %}
+                        <option value="{{ city }}" {% if city == selected_city %}selected{% endif %}>{{ city }}</option>
+                        {% endfor %}
+                    </select><br>
+                    <select id="district" name="district" required>
+                        <option value="">请选择地区名</option>
+                        {% if selected_city %}
+                            {% for district in city_to_districts[selected_city] %}
+                            <option value="{{ district }}" {% if district == selected_district %}selected{% endif %}>{{ district }}</option>
+                            {% endfor %}
+                        {% endif %}
+                    </select><br>
+                    <button type="submit">PREDICT</button>
+                </form>
+                {% if prediction_text %}
+                    <div class="prediction">
+                        {{ prediction_text }}
+                    </div>
                 {% endif %}
-            </select><br>
-            <button type="submit">PREDICT</button>
-        </form>
-        {% if prediction_text %}
-            <div class="result">
-                <h3>{{ prediction_text }}</h3>
             </div>
-        {% endif %}
-        {% if result %}
-            <div class="result">
-                <h3>历史数据匹配结果</h3>
-                <div>{{ result|safe }}</div>
+            <div class="result-container">
+                {% if result %}
+                    <div class="result">
+                        <h3>History Price</h3>
+                        <div class="table-container">
+                            {{ result|safe }}
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="result">
+                        <h3>没有找到匹配的数据。</h3>
+                    </div>
+                {% endif %}
             </div>
-        {% endif %}
+        </div>
+        <div class="charts-container">
+            {% if chart_exists %}
+            <div class="chart">
+                <h2></h2>
+                <img src="{{ url_for('static', filename='price_stats.png') }}" alt="Price Statistics" style="width: 100%;">
+            </div>
+            {% endif %}
+            
+            {% if another_chart_exists %}
+            <div class="chart">
+                <h2>另一个图表</h2>
+                <img src="{{ url_for('static', filename='another_chart.png') }}" alt="Another Chart" style="width: 100%;">
+            </div>
+            {% endif %}
+        </div>
+        <h3 class="footer-text">Created by WEI CHUANJUN</h3>
     </div>
-    <h3 class="footer-text">Created by WEI CHUANJUN</h3>
 </body>
 </html>
