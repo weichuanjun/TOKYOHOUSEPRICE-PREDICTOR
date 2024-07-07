@@ -1,7 +1,7 @@
 # 东京房价预测应用
 
 这是一个使用 Flask 构建的东京房价预测 Web 应用。使用东京30年真实房产成交数据训练的机器学习模型。用户可以输入房产的特征信息，预测房产的价格，并查看相关的历史交易数据和趋势图表。
-
+![My Image](https://user-images.githubusercontent.com/your-username/issue-number/image.png)
 ## 目录
 
 - [安装](#安装)
