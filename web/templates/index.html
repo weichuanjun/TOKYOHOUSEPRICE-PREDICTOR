@@ -12,7 +12,7 @@
         }
         .container {
             max-width: 1200px;
-            margin: 20px auto;
+            margin: 5px auto;
             padding: 20px;
             background-color: #fff;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -21,6 +21,7 @@
             flex-direction: column;
             align-items: center;
         }
+        
         h2 {
             margin-bottom: 10px;
             text-align: center;
@@ -57,22 +58,25 @@
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             background-color: #fff;
-            margin-bottom: 20px;
+            margin-bottom: 5px;
             display: flex;
             flex-direction: column;
             height: auto; /* 确保容器高度自适应内容 */
             flex: 1; /* 使容器在flex布局中占据相同的高度 */
-            max-height:1000px
+            max-height: 960px; /* 调整这个值以增加最大高度 */
         }
         form {
             display: flex;
             flex-direction: column;
+            width: 100%;
         }
         input, select, button {
             margin: 10px 0;
             padding: 10px;
             border-radius: 5px;
             border: 1px solid #ccc;
+            width: 100%; /* 设置宽度为100% */
+            box-sizing: border-box; /* 确保padding和border计算在内 */
         }
         button {
             background-color: #007bff;
@@ -97,24 +101,45 @@
         }
         .charts-container {
             width: 100%;
+            max-width: 1100px; /* 确保容器最大宽度 */
+            margin: 0px auto; /* 确保上下边距，并使容器居中 */
+            padding: 0 25px; /* 确保容器与左右两边有一定的距离 */
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin-left: 20px; /* 设置图表的左外边距 */
-            margin-right: 20px; /* 设置图表的右外边距 */
-        }
+            max-height: none; /* 确保没有最大高度限制 */
+        }     
         .chart {
-            margin-bottom: 5px;
-            width: 97%;
+            margin-bottom: 1px; /* 确保图表之间有间距 */
+            width: 100%; /* 设置宽度为100% */
+            padding: 20px;
+            background-color: #fff;
+            text-align: center; /* 使图表内容居中 */
+            margin-left: 10px;
+            margin-right: 10px;
+        }
+        .chart img {
+            width: auto; /* 确保宽度自动调整 */
+            height: auto; /* 确保高度自动调整 */
+            max-width: auto; /* 确保没有最大宽度限制 */
+            max-height: none; /* 确保没有最大高度限制 */
+        }
+        .charts-box {
+            width: 100%;
             border: 1px solid #ccc;
             border-radius: 8px;
-            padding: 20px;
+            padding: 50px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             background-color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* 使内容居中对齐 */
+            max-height: none; /* 确保没有最大高度限制 */
         }
         .table-container {
             width: 100%;
             overflow-x: auto;
+            max-height: 100%; /* 确保容器不会溢出 */
         }
         table {
             width: 100%;
@@ -134,84 +159,303 @@
             font-size: 14px;
             width: 100%;
         }
+        .radio-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            justify-content: center;
+        }
+        .radio-group .options {
+            display: flex;
+            gap: 30px;
+        }
+        .radio-group input[type="radio"] {
+            display: none;
+        }
+        .radio-group label {
+            display: inline-block;
+            cursor: pointer;
+            padding: 10px 20px;
+            border: 1px solid #ccc;
+            border-radius: 20px;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+        .radio-group input[type="radio"]:checked + label {
+            background-color: #007bff;
+            color: #fff;
+            border-color: #007bff;
+        }
+        /* 新增的样式 */
+        .tab-container {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            background-color: #f0f0f0;
+            border-radius: 30px 30px 0px 0px;/* 圆角样式 */
+            overflow: hidden; /* 确保内容不会超出圆角边界 */
+        }
+        .tab {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s, border-color 0.3s;
+            border: 0px solid #007bff; /* 默认显示边框 */
+            background-color: transparent; /* 未选中时背景透明 */ 
+            color: #000000; /* 选中时文字*/
+            font-weight: bold; /* 字体加粗 */
+        }
+        
+        .tab:hover {
+            background-color: #80bfff; /* 鼠标悬停时背景 */
+        }
+        
+        .tab.active {
+            background-color: #007bff;
+            color: #fff; /* 选中时文字颜色变白 */
+            border-color: #007bff; /* 选中时边框颜色变蓝 */
+        }
+    
     </style>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            var prefectureSelect = document.getElementById('prefecture');
             var citySelect = document.getElementById('city');
             var districtSelect = document.getElementById('district');
-
+            var stationSelect = document.getElementById('station');
+            var propertyTypeRadios = document.getElementsByName('property_type');
+            var houseInputs = document.getElementById('houseInputs');
+            var apartmentInputs = document.getElementById('apartmentInputs');
+            var analysisTypeRadios = document.getElementsByName('analysis_type');
+            var chartsContainer = document.querySelector('.charts-container');
+            var tabs = document.querySelectorAll('.tab');
+        
+            prefectureSelect.addEventListener('change', function() {
+                var selectedPrefecture = this.value;
+                updateCityOptions(selectedPrefecture);
+                districtSelect.innerHTML = '<option value="">地区を選んでください</option>'; // Reset districts
+                stationSelect.innerHTML = '<option value="">最寄駅を選んでください</option>'; // Reset stations
+            });
+        
             citySelect.addEventListener('change', function() {
+                var selectedPrefecture = prefectureSelect.value;
                 var selectedCity = this.value;
-                districtSelect.innerHTML = '<option value="">请选择地区名</option>';
-                if (selectedCity && cityToDistricts[selectedCity]) {
-                    cityToDistricts[selectedCity].forEach(function(district) {
+                updateDistrictOptions(selectedPrefecture, selectedCity);
+                stationSelect.innerHTML = '<option value="">最寄駅を選んでください</option>'; // Reset stations
+            });
+        
+            districtSelect.addEventListener('change', function() {
+                var selectedPrefecture = prefectureSelect.value;
+                var selectedCity = citySelect.value;
+                var selectedDistrict = this.value;
+                updateStationOptions(selectedPrefecture, selectedCity, selectedDistrict);
+            });
+        
+            function updateCityOptions(prefecture) {
+                citySelect.innerHTML = '<option value="">市区町村を選んでください<</option>';
+                if (prefecture && cityToDistricts[prefecture]) {
+                    for (var city in cityToDistricts[prefecture]) {
+                        var option = new Option(city, city);
+                        citySelect.add(option);
+                    }
+                }
+            }
+        
+            function updateDistrictOptions(prefecture, city) {
+                districtSelect.innerHTML = '<option value="">地区名を選んでください<</option>';
+                if (prefecture && city && cityToDistricts[prefecture][city]) {
+                    for (var district in cityToDistricts[prefecture][city]) {
                         var option = new Option(district, district);
                         districtSelect.add(option);
+                    }
+                }
+            }
+        
+            function updateStationOptions(prefecture, city, district) {
+                stationSelect.innerHTML = '<option value="">最寄駅を選んでください<</option>';
+                if (prefecture && city && district && cityToDistricts[prefecture][city][district]) {
+                    cityToDistricts[prefecture][city][district].forEach(function(station) {
+                        var option = new Option(station, station);
+                        stationSelect.add(option);
                     });
                 }
+            }
+        
+            propertyTypeRadios.forEach(function(radio) {
+                radio.addEventListener('change', function() {
+                    if (this.value === 'house') {
+                        houseInputs.style.display = 'block';
+                        apartmentInputs.style.display = 'none';
+                    } else {
+                        houseInputs.style.display = 'none';
+                        apartmentInputs.style.display = 'block';
+                    }
+                });
             });
-        });
-
-        var cityToDistricts = {{ city_to_districts | tojson }};
-        function validateForm() {
-            const form = document.forms['myForm'];
-            const requiredFields = ['distance', 'area', 'coverage', 'volume_rate', 'age'];
-
-            for (let field of requiredFields) {
-                if (!form[field].value) {
-                    alert('请填写所有必填字段。');
-                    return false;
-                }
-
-                if (isNaN(form[field].value)) {
-                    alert('请确保所有数值字段均为有效数字。');
-                    return false;
+        
+            tabs.forEach(function(tab) {
+                tab.addEventListener('click', function() {
+                    tabs.forEach(function(t) { t.classList.remove('active'); });
+                    this.classList.add('active');
+                    var selectedAnalysisType = this.getAttribute('data-type');
+                    displayCharts(selectedAnalysisType);
+                });
+            });
+        
+            // 保留用户选择
+            const selectedPropertyType = "{{ property_type }}";
+            if (selectedPropertyType) {
+                document.querySelector(`input[name="property_type"][value="${selectedPropertyType}"]`).checked = true;
+                if (selectedPropertyType === 'house') {
+                    houseInputs.style.display = 'block';
+                    apartmentInputs.style.display = 'none';
+                } else {
+                    houseInputs.style.display = 'none';
+                    apartmentInputs.style.display = 'block';
                 }
             }
 
+            // 设置分析类型选项卡的初始值
+            const selectedAnalysisType = "{{ analysis_type }}";
+            if (selectedAnalysisType) {
+                document.querySelector(`.tab[data-type="${selectedAnalysisType}"]`).classList.add('active');
+                displayCharts(selectedAnalysisType);
+            }
+
+            function displayCharts(type) {
+                // Hide all charts
+                chartsContainer.querySelectorAll('.chart').forEach(chart => {
+                    chart.style.display = 'none';
+                });
+
+                // Show only the selected type of charts
+                chartsContainer.querySelectorAll(`.chart.${type}`).forEach(chart => {
+                    chart.style.display = 'block';
+                });
+            }
+        });
+        
+        var cityToDistricts = {{ city_to_districts | tojson }};
+
+        function validateForm() {
+            const form = document.forms['myForm'];
+            const propertyType = form['property_type'].value;
+        
+            let requiredFields;
+        
+            if (propertyType === 'house') {
+                requiredFields = ['house_land_area', 'house_building_area', 'house_structure', 'house_age'];
+            } else {
+                requiredFields = ['apartment_area', 'apartment_structure', 'apartment_layout', 'apartment_age'];
+            }
+        
+            for (let field of requiredFields) {
+                const fieldValue = form[field].value.trim();
+                console.log(`${field}: ${fieldValue}`);
+        
+                if (!fieldValue) {
+                    alert('you must input all data');
+                    return false;
+                }
+        
+                // 检查数值字段
+                if (['house_land_area', 'house_building_area', 'house_age', 'apartment_area', 'apartment_age'].includes(field)) {
+                    if (isNaN(parseFloat(fieldValue))) {
+                        alert('all must be number');
+                        return false;
+                    }
+                }
+            }
             return true;
         }
+        
     </script>
 </head>
 <body>
     <div class="container">
-        <h2>Tokyo HousePrice Predictor - Ver3.0</h2>
+        <h2>関東不動産価格予測</h2>
         <div class="form-result-container">
             <div class="form-container">
                 <form name="myForm" method="post" onsubmit="return validateForm()">
-                </select><br>
-                模型版本:
-                <select name="model_version" required>
-                    <option value="v1" {% if request.form['model_version'] == 'v1' %}selected{% endif %}>v1</option>
-                    <option value="v2" {% if request.form['model_version'] == 'v2' %}selected{% endif %}>v2</option>
-                    <option value="v3" {% if request.form['model_version'] == 'v3' %}selected{% endif %}>v3</option>
-                </select><br>
-                    最寄駅：距離: <input type="text" name="distance" value="{{ request.form['distance'] if 'distance' in request.form else '' }}" required><br>
-                    面積（㎡）: <input type="text" name="area" value="{{ request.form['area'] if 'area' in request.form else '' }}" required><br>
-                    建物の構造: 
-                    <select name="structure" required>
-                        {% for structure in ['ＲＣ', 'ＳＲＣ', '鉄骨造', '木造', '軽量鉄骨造', '鉄骨造、軽量鉄骨造', 'ＳＲＣ、鉄骨造', 'ブロック造', 'ＳＲＣ、ＲＣ', '鉄骨造、木造', 'ＲＣ、鉄骨造、木造', 'ＲＣ、ブロック造', 'ＲＣ、木造', 'ＲＣ、鉄骨造', '木造、ブロック造', 'ＲＣ、軽量鉄骨造', '木造、軽量鉄骨造', 'ＲＣ、木造、ブロック造', 'ＳＲＣ、木造', 'ブロック造、軽量鉄骨造', '鉄骨造、木造、軽量鉄骨造', '鉄骨造、ブロック造', 'ＲＣ、鉄骨造、木造、ブロック造', 'ＲＣ、鉄骨造、ブロック造', '鉄骨造、木造、ブロック造', 'ＲＣ、鉄骨造、軽量鉄骨造'] %}
-                        <option value="{{ structure }}" {% if structure == request.form['structure'] %}selected{% endif %}>{{ structure }}</option>
-                        {% endfor %}
-                    </select><br>
-                    建ぺい率（％）: <input type="text" name="coverage" value="{{ request.form['coverage'] if 'coverage' in request.form else '' }}" required><br>
-                    容積率（％）: <input type="text" name="volume_rate" value="{{ request.form['volume_rate'] if 'volume_rate' in request.form else '' }}" required><br>
-                    建築年数: <input type="text" name="age" value="{{ request.form['age'] if 'age' in request.form else '' }}" required><br>
+                    <div class="radio-group">
+                        <div class="options">
+                            <input type="radio" id="apartment" name="property_type" value="apartment" {% if property_type == 'apartment' %}checked{% endif %} required>
+                            <label for="apartment">マンション</label>
+                            
+                            <input type="radio" id="house" name="property_type" value="house" {% if property_type == 'house' %}checked{% endif %} required>
+                            <label for="house">一户建て</label>
+                        </div>
+                    </div>
+                    <div id="houseInputs" style="display:none;">
+                        土地面積（㎡）: <br><input type="text" name="house_land_area" value="{{ request.form['house_land_area'] if 'house_land_area' in request.form else '' }}" required><br><br>
+                        建筑面積（㎡）: <br><input type="text" name="house_building_area" value="{{ request.form['house_building_area'] if 'house_building_area' in request.form else '' }}" required><br><br>
+                        建物の構造: <br>
+                        <select name="house_structure" required>
+                            {% for structure in ['ＲＣ', 'ＳＲＣ', '鉄骨造', '木造', '軽量鉄骨造', '鉄骨造、軽量鉄骨造', 'ＳＲＣ、鉄骨造', 'ブロック造', 'ＳＲＣ、ＲＣ', '鉄骨造、木造', 'ＲＣ、鉄骨造、木造', 'ＲＣ、ブロック造', 'ＲＣ、木造', 'ＲＣ、鉄骨造', '木造、ブロック造', 'ＲＣ、軽量鉄骨造', '木造、軽量鉄骨造', 'ＲＣ、木造、ブロック造', 'ＳＲＣ、木造', 'ブロック造、軽量鉄骨造', '鉄骨造、木造、軽量鉄骨造', '鉄骨造、ブロック造', 'ＲＣ、鉄骨造、木造、ブロック造', 'ＲＣ、鉄骨造、ブロック造', '鉄骨造、木造、ブロック造', 'ＲＣ、鉄骨造、軽量鉄骨造'] %}
+                            <option value="{{ structure }}" {% if structure == request.form['house_structure'] %}selected{% endif %}>{{ structure }}</option>
+                            {% endfor %}
+                        </select><br><br>
+                        建築年数:<br> <input type="text" name="house_age" value="{{ request.form['house_age'] if 'house_age' in request.form else '' }}" required><br><br>
+                    </div>
+                    <div id="apartmentInputs" style="display:none;">
+                        面積（㎡）: <br><input type="text" name="apartment_area" value="{{ request.form['apartment_area'] if 'apartment_area' in request.form else '' }}" required><br><br>
+                        建物の構造: <br>
+                        <select name="apartment_structure" required>
+                            {% for structure in ['ＲＣ', 'ＳＲＣ', '鉄骨造', '木造', '軽量鉄骨造', '鉄骨造、軽量鉄骨造', 'ＳＲＣ、鉄骨造', 'ブロック造', 'ＳＲＣ、ＲＣ', '鉄骨造、木造', 'ＲＣ、鉄骨造、木造', 'ＲＣ、ブロック造', 'ＲＣ、木造', 'ＲＣ、鉄骨造', '木造、ブロック造', 'ＲＣ、軽量鉄骨造', '木造、軽量鉄骨造', 'ＲＣ、木造、ブロック造', 'ＳＲＣ、木造', 'ブロック造、軽量鉄骨造', '鉄骨造、木造、軽量鉄骨造', '鉄骨造、ブロック造', 'ＲＣ、鉄骨造、木造、ブロック造', 'ＲＣ、鉄骨造、ブロック造', '鉄骨造、木造、ブロック造', 'ＲＣ、鉄骨造、軽量鉄骨造'] %}
+                            <option value="{{ structure }}" {% if structure == request.form['apartment_structure'] %}selected{% endif %}>{{ structure }}</option>
+                            {% endfor %}
+                        </select><br><br>
+                        間取り:<br>
+                        <select name="apartment_layout" required>
+                            {% set sorted_layouts = [
+                                '１Ｒ', '１Ｒ＋Ｓ', '１Ｋ', '１Ｋ＋Ｓ', '１ＤＫ', '１ＤＫ＋Ｓ', '１Ｌ', '１Ｌ＋Ｓ', '１ＬＫ', '１ＬＫ＋Ｓ', '１ＬＤＫ', '１ＬＤＫ＋Ｓ', '１ＬＤＫ＋Ｋ',
+                                '２Ｒ', '２Ｒ＋Ｓ', '２Ｋ', '２Ｋ＋Ｓ', '２ＤＫ', '２ＤＫ＋Ｓ', '２Ｌ', '２Ｌ＋Ｓ', '２ＬＫ', '２ＬＫ＋Ｓ', '２ＬＤＫ', '２ＬＤＫ＋Ｓ', '２ＬＤＫ＋Ｋ',
+                                '３Ｒ', '３Ｒ＋Ｓ', '３Ｋ', '３Ｋ＋Ｓ', '３ＤＫ', '３ＤＫ＋Ｓ', '３Ｌ', '３Ｌ＋Ｓ', '３ＬＫ', '３ＬＫ＋Ｓ', '３ＬＤＫ', '３ＬＤＫ＋Ｓ', '３ＬＤＫ＋Ｋ',
+                                '４Ｒ', '４Ｒ＋Ｓ', '４Ｋ', '４Ｋ＋Ｓ', '４ＤＫ', '４ＤＫ＋Ｓ', '４Ｌ', '４Ｌ＋Ｓ', '４ＬＫ', '４ＬＫ＋Ｓ', '４ＬＤＫ', '４ＬＤＫ＋Ｓ', '４ＬＤＫ＋Ｋ',
+                                '５Ｒ', '５Ｒ＋Ｓ', '５Ｋ', '５Ｋ＋Ｓ', '５ＤＫ', '５ＤＫ＋Ｓ', '５Ｌ', '５Ｌ＋Ｓ', '５ＬＫ', '５ＬＫ＋Ｓ', '５ＬＤＫ', '５ＬＤＫ＋Ｓ', '５ＬＤＫ＋Ｋ',
+                                '６Ｒ', '６Ｒ＋Ｓ', '６Ｋ', '６Ｋ＋Ｓ', '６ＤＫ', '６ＤＫ＋Ｓ', '６Ｌ', '６Ｌ＋Ｓ', '６ＬＫ', '６ＬＫ＋Ｓ', '６ＬＤＫ', '６ＬＤＫ＋Ｓ', '６ＬＤＫ＋Ｋ',
+                                '７ＬＤＫ',
+                                'オープンフロア', 'nan', 'スタジオ', 'メゾネット'
+                            ] %}
+                            {% for layout in sorted_layouts %}
+                            <option value="{{ layout }}" {% if layout == request.form['apartment_layout'] %}selected{% endif %}>{{ layout }}</option>
+                            {% endfor %}
+                        </select><br><br>
+                        建築年数:<br> <input type="text" name="apartment_age" value="{{ request.form['apartment_age'] if 'apartment_age' in request.form else '' }}" required><br><br>
+                    </div>
                     地区名:
-                    <select id="city" name="city" required>
-                        <option value="">请选择市区町村名</option>
-                        {% for city in cities %}
-                        <option value="{{ city }}" {% if city == selected_city %}selected{% endif %}>{{ city }}</option>
+                    <select id="prefecture" name="prefecture" required>
+                        <option value="">都道府県名を選んでください</option>
+                        {% for prefecture in prefectures %}
+                        <option value="{{ prefecture }}" {% if prefecture == selected_prefecture %}selected{% endif %}>{{ prefecture }}</option>
                         {% endfor %}
-                    </select><br>
+                    </select>
+                    <select id="city" name="city" required>
+                        <option value="">市区町村名を選んでください</option>
+                        {% if selected_prefecture %}
+                            {% for city in city_to_districts[selected_prefecture].keys() %}
+                            <option value="{{ city }}" {% if city == selected_city %}selected{% endif %}>{{ city }}</option>
+                            {% endfor %}
+                        {% endif %}
+                    </select>
                     <select id="district" name="district" required>
-                        <option value="">请选择地区名</option>
+                        <option value="">地区名を選んでください</option>
                         {% if selected_city %}
-                            {% for district in city_to_districts[selected_city] %}
+                            {% for district in city_to_districts[selected_prefecture][selected_city] %}
                             <option value="{{ district }}" {% if district == selected_district %}selected{% endif %}>{{ district }}</option>
                             {% endfor %}
                         {% endif %}
                     </select><br>
+                    最寄駅：
+                    <select id="station" name="station" required>
+                        <option value="">最寄駅を選んでください</option>
+                        {% if selected_district %}
+                            {% for station in city_to_districts[selected_prefecture][selected_city][selected_district] %}
+                            <option value="{{ station }}" {% if station == selected_station %}selected{% endif %}>{{ station }}</option>
+                            {% endfor %}
+                        {% endif %}
+                    </select><br>
+                    最寄駅：距離(分): <br><input type="text" name="distance" value="{{ request.form['distance'] if 'distance' in request.form else '' }}" required><br>
                     <button type="submit">PREDICT</button>
                 </form>
                 {% if prediction_text %}
@@ -221,28 +465,66 @@
                 {% endif %}
             </div>
             <div class="result-container">
-                {% if result %}
+                {% if result != "NO DATA" %}
                     <div class="result">
-                        <h3>History Price</h3>
+                        <h3>過去の取引記録</h3>
                         <div class="table-container">
                             {{ result|safe }}
                         </div>
                     </div>
                 {% else %}
                     <div class="result">
-                        <h3>没有找到匹配的数据。</h3>
+                        <h3>NO DATA</h3>
                     </div>
                 {% endif %}
             </div>
         </div>
+        <!-- 新增的选项卡容器 -->
+        <div class="tab-container">
+            <div class="tab" data-type="district">{{selected_district}}地域の分析</div>
+            <div class="tab" data-type="station">{{selected_station}}駅の分析</div>
+        </div>
         <div class="charts-container">
             {% if chart_exists %}
-            <div class="chart">
-                <h2></h2>
-                <img src="{{ url_for('static', filename='price_stats.png') }}" alt="Price Statistics" style="width: 100%;">
+            <div class="charts-box">
+                <div class="chart district">
+                    <img src="{{ district_price_trend_path }}" alt="Price Trend">
+                </div>
+                <div class="chart district">
+                    <img src="{{ district_price_per_sqm_trend_path }}" alt="Transaction Volume">
+                </div>
+                <div class="chart district">
+                    <img src="{{ district_transaction_volume_path }}" alt="Transaction Volume">
+                </div>
+                <div class="chart district">
+                    <img src="{{ district_price_distribution_path }}" alt="Transaction Volume">
+                </div>
+                <div class="chart district">
+                    <img src="{{ district_price_distribution_pie_path }}" alt="Price Distribution">
+                </div>
+
+
+                <div class="chart station">
+                    <img src="{{ station_price_trend_path }}" alt="Price Trend">
+                </div>
+                <div class="chart station">
+                    <img src="{{ station_price_per_sqm_trend_path }}" alt="Transaction Volume">
+                </div>
+                <div class="chart station">
+                    <img src="{{ station_transaction_volume_path }}" alt="Transaction Volume">
+                </div>
+                <div class="chart station">
+                    <img src="{{ station_price_distribution_path }}" alt="Price Distribution">
+                </div> 
+
+                <div class="chart station">
+                    <img src="{{ station_price_distribution_pie_path }}" alt="Transaction Volume">
+                </div>
+
             </div>
             {% endif %}
         </div>
+        <br>
         <h3 class="footer-text">Created by WEI CHUANJUN</h3>
     </div>
 </body>

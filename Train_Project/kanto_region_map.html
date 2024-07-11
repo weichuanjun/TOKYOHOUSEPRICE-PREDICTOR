@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Bokeh Plot</title>
+    <style>
+      html, body {
+        box-sizing: border-box;
+        display: flow-root;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+    <script type="text/javascript" src="https://cdn.bokeh.org/bokeh/release/bokeh-3.3.4.min.js"></script>
+    <script type="text/javascript">
+        Bokeh.set_log_level("info");
+    </script>
+  </head>
+  <body>
+    <div id="c0d11b6d-07ae-4521-89c3-5a793d1d90ce" data-root-id="p1112" style="display: contents;"></div>
+  
+    <script type="application/json" id="p1160">
+      {"8175640b-674c-43a7-9b1d-a798e3df636a":{"version":"3.3.4","title":"Bokeh Application","roots":[{"type":"object","name":"Figure","id":"p1112","attributes":{"x_range":{"type":"object","name":"Range1d","id":"p1122","attributes":{"start":15535800.285127891,"end":15581414.899959426}},"y_range":{"type":"object","name":"Range1d","id":"p1123","attributes":{"start":4240225.839421003,"end":4267980.732184108}},"x_scale":{"type":"object","name":"LinearScale","id":"p1124"},"y_scale":{"type":"object","name":"LinearScale","id":"p1125"},"title":{"type":"object","name":"Title","id":"p1115","attributes":{"text":"Kanto Region Transactions"}},"renderers":[{"type":"object","name":"TileRenderer","id":"p1139","attributes":{"tile_source":{"type":"object","name":"WMTSTileSource","id":"p1111","attributes":{"url":"https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png","max_zoom":20,"attribution":"&amp;copy; &lt;a href=\"https://www.openstreetmap.org/copyright\"&gt;OpenStreetMap&lt;/a&gt; contributors &amp;copy; &lt;a href=\"https://carto.com/attributions\"&gt;CARTO&lt;/a&gt;"}}}},{"type":"object","name":"GlyphRenderer","id":"p1150","attributes":{"data_source":{"type":"object","name":"ColumnDataSource","id":"p1141","attributes":{"selected":{"type":"object","name":"Selection","id":"p1142","attributes":{"indices":[],"line_indices":[]}},"selection_policy":{"type":"object","name":"UnionRenderers","id":"p1143"},"data":{"type":"map","entries":[["index",{"type":"ndarray","array":{"type":"bytes","data":"AAAAAAEAAAACAAAA"},"shape":[3],"dtype":"int32","order":"little"}],["latitude",{"type":"ndarray","array":{"type":"bytes","data":"x0s3iUHYQUARx7q4jdZBQLfRAN4C0UFA"},"shape":[3],"dtype":"float64","order":"little"}],["longitude",{"type":"ndarray","array":{"type":"bytes","data":"ldQJaCJ2YUDXEvJBz3RhQMDsnjwsfGFA"},"shape":[3],"dtype":"float64","order":"little"}],["\u53d6\u5f15\u4fa1\u683c\uff08\u7dcf\u984d\uff09",{"type":"ndarray","array":{"type":"bytes","data":"QEIPAICEHgBg4xYA"},"shape":[3],"dtype":"int32","order":"little"}],["\u6700\u5bc4\u99c5\uff1a\u540d\u79f0",{"type":"ndarray","array":["Tokyo","Shibuya","Odaiba"],"shape":[3],"dtype":"object","order":"little"}],["x",{"type":"ndarray","array":{"type":"bytes","data":"onwvHfmobUGHxB8JuaZtQbZ3zNw6s21B"},"shape":[3],"dtype":"float64","order":"little"}],["y",{"type":"ndarray","array":{"type":"bytes","data":"vBrcLi8+UEGmnGl+ZzxQQd8SuXWcNlBB"},"shape":[3],"dtype":"float64","order":"little"}]]}}},"view":{"type":"object","name":"CDSView","id":"p1151","attributes":{"filter":{"type":"object","name":"AllIndices","id":"p1152"}}},"glyph":{"type":"object","name":"Circle","id":"p1147","attributes":{"x":{"type":"field","field":"x"},"y":{"type":"field","field":"y"},"size":{"type":"value","value":15},"line_color":{"type":"value","value":"#1f77b4"},"fill_color":{"type":"value","value":"red"},"fill_alpha":{"type":"value","value":0.8}}},"nonselection_glyph":{"type":"object","name":"Circle","id":"p1148","attributes":{"x":{"type":"field","field":"x"},"y":{"type":"field","field":"y"},"size":{"type":"value","value":15},"line_color":{"type":"value","value":"#1f77b4"},"line_alpha":{"type":"value","value":0.1},"fill_color":{"type":"value","value":"red"},"fill_alpha":{"type":"value","value":0.1},"hatch_alpha":{"type":"value","value":0.1}}},"muted_glyph":{"type":"object","name":"Circle","id":"p1149","attributes":{"x":{"type":"field","field":"x"},"y":{"type":"field","field":"y"},"size":{"type":"value","value":15},"line_color":{"type":"value","value":"#1f77b4"},"line_alpha":{"type":"value","value":0.2},"fill_color":{"type":"value","value":"red"},"fill_alpha":{"type":"value","value":0.2},"hatch_alpha":{"type":"value","value":0.2}}}}}],"toolbar":{"type":"object","name":"Toolbar","id":"p1121","attributes":{"tools":[{"type":"object","name":"PanTool","id":"p1136"},{"type":"object","name":"WheelZoomTool","id":"p1137","attributes":{"renderers":"auto"}},{"type":"object","name":"ResetTool","id":"p1138"},{"type":"object","name":"HoverTool","id":"p1153","attributes":{"renderers":"auto","tooltips":[["\u99c5","@{\u6700\u5bc4\u99c5\uff1a\u540d\u79f0}"],["\u53d6\u5f15\u4fa1\u683c\uff08\u7dcf\u984d\uff09","@{\u53d6\u5f15\u4fa1\u683c\uff08\u7dcf\u984d\uff09}"]]}}]}},"left":[{"type":"object","name":"MercatorAxis","id":"p1131","attributes":{"ticker":{"type":"object","name":"MercatorTicker","id":"p1132","attributes":{"mantissas":[1,2,5],"dimension":"lat"}},"formatter":{"type":"object","name":"MercatorTickFormatter","id":"p1133","attributes":{"dimension":"lat"}},"major_label_policy":{"type":"object","name":"AllLabels","id":"p1134"}}}],"below":[{"type":"object","name":"MercatorAxis","id":"p1126","attributes":{"ticker":{"type":"object","name":"MercatorTicker","id":"p1127","attributes":{"mantissas":[1,2,5],"dimension":"lon"}},"formatter":{"type":"object","name":"MercatorTickFormatter","id":"p1128","attributes":{"dimension":"lon"}},"major_label_policy":{"type":"object","name":"AllLabels","id":"p1129"}}}],"center":[{"type":"object","name":"Grid","id":"p1130","attributes":{"axis":{"id":"p1126"}}},{"type":"object","name":"Grid","id":"p1135","attributes":{"dimension":1,"axis":{"id":"p1131"}}}]}}]}}
+    </script>
+    <script type="text/javascript">
+      (function() {
+        const fn = function() {
+          Bokeh.safely(function() {
+            (function(root) {
+              function embed_document(root) {
+              const docs_json = document.getElementById('p1160').textContent;
+              const render_items = [{"docid":"8175640b-674c-43a7-9b1d-a798e3df636a","roots":{"p1112":"c0d11b6d-07ae-4521-89c3-5a793d1d90ce"},"root_ids":["p1112"]}];
+              root.Bokeh.embed.embed_items(docs_json, render_items);
+              }
+              if (root.Bokeh !== undefined) {
+                embed_document(root);
+              } else {
+                let attempts = 0;
+                const timer = setInterval(function(root) {
+                  if (root.Bokeh !== undefined) {
+                    clearInterval(timer);
+                    embed_document(root);
+                  } else {
+                    attempts++;
+                    if (attempts > 100) {
+                      clearInterval(timer);
+                      console.log("Bokeh: ERROR: Unable to run BokehJS code because BokehJS library is missing");
+                    }
+                  }
+                }, 10, root)
+              }
+            })(window);
+          });
+        };
+        if (document.readyState != "loading") fn();
+        else document.addEventListener("DOMContentLoaded", fn);
+      })();
+    </script>
+  </body>
+</html>
